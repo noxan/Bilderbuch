@@ -32,6 +32,8 @@
 <div class="container">
   <h1>Welcome to Tauri!</h1>
 
+  <a href="/settings">Go to settings</a>
+
   <p>
     Current path: {path}
 
