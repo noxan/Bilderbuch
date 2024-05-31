@@ -54,8 +54,10 @@
 
   {#if metadata}
     <div>
+      <h2>{metadata.file.fileName}</h2>
+      {metadata.data.metadata.rawMetadata.exif.create_date}
       <code>
-        <pre>{JSON.stringify(metadata, null, 2)}</pre>
+        <pre>{JSON.stringify(metadata.data.metadata.rawMetadata, null, 2)}</pre>
       </code>
       <button on:click={() => (metadata = undefined)}>Close</button>
     </div>
