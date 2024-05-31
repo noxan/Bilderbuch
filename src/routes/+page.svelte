@@ -3,6 +3,7 @@
 
   type Item = {
     path: string;
+    is_directory: boolean;
   };
 
   let path = "/Volumes/EOS_DIGITAL/";
@@ -33,9 +34,13 @@
   <ul>
     {#each files as file}
       <li>
-        <button on:click={browseDirectory}>
+        {#if file.is_directory}
+          <button on:click={browseDirectory}>
+            {file.path}
+          </button>
+        {:else}
           {file.path}
-        </button>
+        {/if}
       </li>
     {/each}
   </ul>

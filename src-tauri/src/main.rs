@@ -4,6 +4,7 @@
 #[derive(serde::Serialize)]
 struct Item {
     path: String,
+    is_directory: bool,
 }
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -15,6 +16,7 @@ fn list_directory(path: &str) -> Vec<Item> {
             let file = file.unwrap();
             return Item {
                 path: file.path().display().to_string(),
+                is_directory: file.file_type().unwrap().is_dir(),
             };
         })
         .collect::<Vec<Item>>();
