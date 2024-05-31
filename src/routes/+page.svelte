@@ -1,13 +1,13 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
 
-  let name = "";
-  let greetMsg = "";
+  let files: string[] = [];
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    greetMsg = await invoke("greet", { name });
+  // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+  async function listDirectory() {
+    files = await invoke("list_directory", { path: "/Volumes/EOS_DIGITAL/" });
   }
+  listDirectory();
 </script>
 
 <div class="container">
@@ -25,7 +25,13 @@
     </a>
   </div>
 
-  <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
+<ul>
+	{#each files as file}
+		<li>
+      {file}
+		</li>
+	{/each}
+</ul>
 
   <form class="row" on:submit|preventDefault={greet}>
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
