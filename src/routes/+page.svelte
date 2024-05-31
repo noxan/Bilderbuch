@@ -6,7 +6,7 @@
     is_directory: boolean;
   };
 
-  let path = "/Volumes/EOS_DIGITAL/";
+  let path = "/Volumes/EOS_DIGITAL";
   let files: Item[] = [];
 
   function browseDirectory(event: MouseEvent) {
@@ -15,6 +15,11 @@
       path = target.textContent;
       listDirectory();
     }
+  }
+
+  function navigateUp() {
+    path = path.split("/").slice(0, -1).join("/");
+    listDirectory();
   }
 
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -29,6 +34,10 @@
 
   <p>
     Current path: {path}
+
+    {#if path !== "/Volumes"}
+      <button on:click={navigateUp}>Go up</button>
+    {/if}
   </p>
 
   <ul>
