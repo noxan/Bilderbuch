@@ -40,7 +40,9 @@
 <div class="container">
   <h1>Welcome to Tauri!</h1>
 
-  <a href="/settings">Go to settings</a>
+  <p>
+    <a href="/settings">Go to settings</a>
+  </p>
 
   <p>
     Current path: {path}
@@ -51,12 +53,12 @@
   </p>
 
   {#if metadata}
-    <p>
+    <div>
       <code>
         <pre>{JSON.stringify(metadata, null, 2)}</pre>
       </code>
       <button on:click={() => (metadata = undefined)}>Close</button>
-    </p>
+    </div>
   {/if}
 
   <ul>
@@ -101,6 +103,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+
+  p {
     text-align: center;
   }
 
