@@ -13,15 +13,13 @@
 <div class="container">
   <h1>Welcome to Tauri!</h1>
 
-
-<ul>
-	{#each files as file}
-		<li>
-      {file}
-		</li>
-	{/each}
-</ul>
-
+  <ul>
+    {#each files as file}
+      <li>
+        {file}
+      </li>
+    {/each}
+  </ul>
 </div>
 
 <style>
