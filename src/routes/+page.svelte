@@ -1,12 +1,17 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
 
+  type SystemTime = {
+    secs_since_epoch: number;
+    nanos: number;
+  };
+
   type Item = {
     path: string;
     metadata: {
-      created: string;
-      accessed: string;
-      modified: string;
+      created: SystemTime;
+      accessed: SystemTime;
+      modified: SystemTime;
     };
     is_directory: boolean;
   };
@@ -58,7 +63,7 @@
           </button>
         {:else}
           {file.path}
-          {JSON.stringify(file.metadata.created)}
+          {new Date(file.metadata.created.secs_since_epoch * 1000)}
         {/if}
       </li>
     {/each}
