@@ -3,11 +3,15 @@
 
   type Item = {
     path: string;
+    metadata: {
+      created: string;
+      accessed: string;
+      modified: string;
+    };
     is_directory: boolean;
   };
 
   let path = "/Volumes/EOS_DIGITAL";
-  let metadata: any = undefined;
   let files: Item[] = [];
 
   function browseDirectory(event: MouseEvent) {
@@ -15,13 +19,6 @@
     if (target.textContent) {
       path = target.textContent;
       listDirectory();
-    }
-  }
-
-  async function readImage(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target.textContent) {
-      metadata = await invoke("read_image", { path: target.textContent });
     }
   }
 
@@ -52,17 +49,6 @@
     {/if}
   </p>
 
-  {#if metadata}
-    <div>
-      <h2>{metadata.file.fileName}</h2>
-      {metadata.data.metadata.rawMetadata.exif.create_date}
-      <code>
-        <pre>{JSON.stringify(metadata.data.metadata.rawMetadata, null, 2)}</pre>
-      </code>
-      <button on:click={() => (metadata = undefined)}>Close</button>
-    </div>
-  {/if}
-
   <ul>
     {#each files as file}
       <li>
@@ -70,12 +56,9 @@
           <button on:click={browseDirectory}>
             {file.path}
           </button>
-        {:else if file.path.toLowerCase().endsWith(".cr2")}
-          <button on:click={readImage}>
-            {file.path}
-          </button>
         {:else}
           {file.path}
+          {JSON.stringify(file.metadata.created)}
         {/if}
       </li>
     {/each}
