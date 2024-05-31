@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use rawler::analyze::AnalyzerResult;
+
 #[derive(serde::Serialize)]
 struct Item {
     path: String,
@@ -22,10 +24,16 @@ fn list_directory(path: &str) -> Vec<Item> {
         .collect::<Vec<Item>>();
 }
 
+#[tauri::command]
+fn read_image(path: &str) -> AnalyzerResult {
+    let result = rawler::analyze::analyze_metadata(path).unwrap();
+    return result;
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![list_directory])
+        .invoke_handler(tauri::generate_handler![list_directory, read_image])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
