@@ -1,13 +1,23 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+#[derive(serde::Serialize)]
+struct Item {
+    path: String,
+}
+
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn list_directory(path: &str) -> Vec<String> {
+fn list_directory(path: &str) -> Vec<Item> {
     let files = std::fs::read_dir(path).unwrap();
     return files
-        .map(|f| f.unwrap().path().display().to_string())
-        .collect::<Vec<String>>();
+        .map(|file| {
+            let file = file.unwrap();
+            return Item {
+                path: file.path().display().to_string(),
+            };
+        })
+        .collect::<Vec<Item>>();
 }
 
 fn main() {

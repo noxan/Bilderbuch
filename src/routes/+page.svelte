@@ -1,8 +1,12 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
 
+  type Item = {
+    path: string;
+  };
+
   let path = "/Volumes/EOS_DIGITAL/";
-  let files: string[] = [];
+  let files: Item[] = [];
 
   function browseDirectory(event: MouseEvent) {
     const target = event.target as HTMLElement;
@@ -30,7 +34,7 @@
     {#each files as file}
       <li>
         <button on:click={browseDirectory}>
-          {file}
+          {file.path}
         </button>
       </li>
     {/each}
