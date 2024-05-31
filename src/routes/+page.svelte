@@ -1,11 +1,20 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
 
+  let path = "/Volumes/EOS_DIGITAL/";
   let files: string[] = [];
+
+  function browseDirectory(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (target.textContent) {
+      path = target.textContent;
+      listDirectory();
+    }
+  }
 
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
   async function listDirectory() {
-    files = await invoke("list_directory", { path: "/Volumes/EOS_DIGITAL/" });
+    files = await invoke("list_directory", { path });
   }
   listDirectory();
 </script>
@@ -13,10 +22,16 @@
 <div class="container">
   <h1>Welcome to Tauri!</h1>
 
+  <p>
+    Current path: {path}
+  </p>
+
   <ul>
     {#each files as file}
       <li>
-        {file}
+        <button on:click={browseDirectory}>
+          {file}
+        </button>
       </li>
     {/each}
   </ul>
