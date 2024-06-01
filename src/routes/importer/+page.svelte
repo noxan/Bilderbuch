@@ -20,14 +20,6 @@
   let path = "/Volumes";
   let files: Item[] = [];
 
-  function browseDirectory(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target.textContent) {
-      path = target.textContent;
-      listDirectory();
-    }
-  }
-
   function navigateTo(target: string) {
     path = target;
     listDirectory();
@@ -43,6 +35,10 @@
     files = await invoke("list_directory", { path });
   }
   listDirectory();
+
+  function displayDate(time: SystemTime) {
+    return new Date(time.secs_since_epoch * 1000).toDateString();
+  }
 
   function filterDisplayFile(path: string) {
     const name = path.toLowerCase();
@@ -68,15 +64,17 @@
     {/if}
   </p>
 
-  <ul>
+  <div class="grid">
     {#each files as file}
-      <li>
+      <div>
         {#if file.is_directory}
-          <button on:click={browseDirectory}>
-            {file.path}
+          <button on:click={() => navigateTo(file.path)}>
+            {file.name}
           </button>
         {:else}
-          {file.path}
+          <div>
+            {file.name}
+          </div>
           {#if filterDisplayFile(file.path)}
             <img
               src={convertFileSrc(file.path)}
@@ -86,9 +84,19 @@
               width="100"
             />
           {/if}
-          {new Date(file.metadata.created.secs_since_epoch * 1000)}
+          <small>
+            {displayDate(file.metadata.created)}
+          </small>
         {/if}
-      </li>
+      </div>
     {/each}
-  </ul>
+  </div>
 </main>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+</style>
