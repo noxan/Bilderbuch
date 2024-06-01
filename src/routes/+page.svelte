@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
+  import { invoke, convertFileSrc } from "@tauri-apps/api/core";
 
   type SystemTime = {
     secs_since_epoch: number;
@@ -63,6 +63,9 @@
           </button>
         {:else}
           {file.path}
+          {#if file.path.toLowerCase().endsWith(".png")}
+            <img src={convertFileSrc(file.path)} alt={file.path} height="100" />
+          {/if}
           {new Date(file.metadata.created.secs_since_epoch * 1000)}
         {/if}
       </li>
