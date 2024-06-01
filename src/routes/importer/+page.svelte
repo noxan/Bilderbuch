@@ -7,6 +7,7 @@
   };
 
   type Item = {
+    name: string;
     path: string;
     metadata: {
       created: SystemTime;

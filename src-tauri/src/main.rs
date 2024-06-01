@@ -10,6 +10,7 @@ struct Metadata {
 
 #[derive(serde::Serialize)]
 struct Item {
+    name: String,
     path: String,
     metadata: Metadata,
     is_directory: bool,
@@ -24,6 +25,7 @@ fn list_directory(path: &str) -> Vec<Item> {
             let file = file.unwrap();
             let metadata = file.metadata().unwrap();
             return Item {
+                name: file.file_name().into_string().unwrap(),
                 path: file.path().display().to_string(),
                 metadata: Metadata {
                     accessed: metadata.accessed().unwrap(),
