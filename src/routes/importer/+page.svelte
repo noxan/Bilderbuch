@@ -42,6 +42,11 @@
     files = await invoke("list_directory", { path });
   }
   listDirectory();
+
+  function filterDisplayFile(path: string) {
+    const name = path.toLowerCase();
+    return name.endsWith(".jpg") || name.endsWith(".png");
+  }
 </script>
 
 <main>
@@ -71,7 +76,7 @@
           </button>
         {:else}
           {file.path}
-          {#if file.path.toLowerCase().endsWith(".jpg")}
+          {#if filterDisplayFile(file.path)}
             <img
               src={convertFileSrc(file.path)}
               loading="lazy"
