@@ -16,7 +16,7 @@
     is_directory: boolean;
   };
 
-  let path = "/Volumes/EOS_DIGITAL";
+  let path = "/Volumes";
   let files: Item[] = [];
 
   function browseDirectory(event: MouseEvent) {
