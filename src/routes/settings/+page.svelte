@@ -4,8 +4,10 @@
   export let data: PageData;
 </script>
 
-<h1>Settings</h1>
+<main>
+  <h1>Settings</h1>
 
-<a href="/">Close</a>
+  <a href="/">Close</a>
 
-{JSON.stringify(data)}
+  {JSON.stringify(data)}
+</main>
