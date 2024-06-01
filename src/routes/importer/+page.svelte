@@ -27,6 +27,11 @@
     }
   }
 
+  function navigateTo(target: string) {
+    path = target;
+    listDirectory();
+  }
+
   function navigateUp() {
     path = path.split("/").slice(0, -1).join("/");
     listDirectory();
@@ -49,7 +54,10 @@
   <p>
     Current path: {path}
 
-    {#if path !== "/Volumes"}
+    <button on:click={() => navigateTo("/Users")}>Home</button>
+    <button on:click={() => navigateTo("/Volumes")}>Volumes</button>
+
+    {#if path !== "/Volumes" && path !== "/Users"}
       <button on:click={navigateUp}>Go up</button>
     {/if}
   </p>
