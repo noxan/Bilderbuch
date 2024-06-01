@@ -40,10 +40,10 @@
 </script>
 
 <main>
-  <h1>Welcome to Tauri!</h1>
+  <h1>Import photos</h1>
 
   <p>
-    <a href="/settings">Go to settings</a>
+    <a href="/">Cancel</a>
   </p>
 
   <p>
