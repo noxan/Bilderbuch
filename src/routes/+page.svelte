@@ -63,8 +63,14 @@
           </button>
         {:else}
           {file.path}
-          {#if file.path.toLowerCase().endsWith(".png")}
-            <img src={convertFileSrc(file.path)} alt={file.path} height="100" />
+          {#if file.path.toLowerCase().endsWith(".jpg")}
+            <img
+              src={convertFileSrc(file.path)}
+              loading="lazy"
+              alt={file.path}
+              height="100"
+              width="100"
+            />
           {/if}
           {new Date(file.metadata.created.secs_since_epoch * 1000)}
         {/if}
