@@ -54,10 +54,12 @@
   </p>
 
   <p>
-    Current path: {path}
-
     <button on:click={() => navigateTo("/Users")}>Home</button>
     <button on:click={() => navigateTo("/Volumes")}>Volumes</button>
+  </p>
+
+  <p>
+    Current path: {path}
 
     {#if path !== "/Volumes" && path !== "/Users"}
       <button on:click={navigateUp}>Go up</button>
@@ -75,14 +77,12 @@
           <div>
             {file.name}
           </div>
-          {#if filterDisplayFile(file.path)}
-            <div
-              class="image"
-              style="background-image: url({convertFileSrc(file.path)})"
-            />
-          {/if}
+          <div
+            class="image"
+            style={`background-image: url(${filterDisplayFile(file.path) ? convertFileSrc(file.path) : ""}`}
+          />
           <small>
-            {displayDate(file.metadata.created)}
+            {displayDate(file.metadata.created) + " "}
           </small>
         {/if}
       </div>
