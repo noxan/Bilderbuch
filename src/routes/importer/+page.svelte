@@ -76,12 +76,9 @@
             {file.name}
           </div>
           {#if filterDisplayFile(file.path)}
-            <img
-              src={convertFileSrc(file.path)}
-              loading="lazy"
-              alt={file.path}
-              height="100"
-              width="100"
+            <div
+              class="image"
+              style="background-image: url({convertFileSrc(file.path)})"
             />
           {/if}
           <small>
@@ -98,5 +95,13 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
+  }
+
+  .image {
+    width: 200px;
+    height: 200px;
+    background-color: lightgrey;
+    background-size: cover;
+    background-position: center;
   }
 </style>
