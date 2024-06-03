@@ -9,6 +9,9 @@
       <a href="/importer">Import photos</a>
     </li>
     <li>
+      <a href="/image">Image test</a>
+    </li>
+    <li>
       <a href="/settings">Settings</a>
     </li>
   </ul>
