@@ -1,10 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{
-    http::{Request, Response},
-    AppHandle,
-};
+use tauri::{http, AppHandle};
 
 #[derive(serde::Serialize)]
 struct Metadata {
@@ -43,7 +40,10 @@ fn list_directory(path: &str) -> Vec<Item> {
         .collect::<Vec<Item>>();
 }
 
-fn protocol_raw_image_handler(_app: &AppHandle, req: Request<Vec<u8>>) -> Response<Vec<u8>> {
+fn protocol_raw_image_handler(
+    _app: &AppHandle,
+    req: http::Request<Vec<u8>>,
+) -> Result<http::Response<Vec<u8>>, Box<dyn std::error::Error>> {
     // remove trailing slash from path
     let path = req.uri().path();
     let filepath = percent_encoding::percent_decode(path[1..].as_bytes())
@@ -51,21 +51,31 @@ fn protocol_raw_image_handler(_app: &AppHandle, req: Request<Vec<u8>>) -> Respon
         .to_string();
     println!("path: {}", path);
 
-    let raw_data = std::fs::read(filepath).unwrap();
-    let (thumbnail, _orientation) = quickraw::Export::export_thumbnail_data(&raw_data).unwrap();
+    let raw_data = std::fs::read(filepath)?;
+    let (thumbnail, _orientation) = quickraw::Export::export_thumbnail_data(&raw_data)?;
 
-    Response::builder()
+    Ok(http::Response::builder()
         .status(200)
         .header("Content-Type", "image/jpg")
-        .body(thumbnail.to_vec())
-        .unwrap()
+        .body(thumbnail.to_vec())?)
 }
 
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![list_directory])
-        .register_uri_scheme_protocol("rawimage", protocol_raw_image_handler)
+        .register_uri_scheme_protocol("rawimage", |_app, req| {
+            match protocol_raw_image_handler(_app, req) {
+                Ok(response) => response,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    http::Response::builder()
+                        .status(500)
+                        .body(Vec::new())
+                        .unwrap()
+                }
+            }
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
