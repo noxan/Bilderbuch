@@ -1,6 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+pub mod raw;
+
+use std::fs::File;
+
 use tauri::{http, AppHandle};
 
 #[derive(serde::Serialize)]
@@ -49,10 +53,13 @@ fn protocol_raw_image_handler(
     let filepath = percent_encoding::percent_decode(path[1..].as_bytes())
         .decode_utf8_lossy()
         .to_string();
-    println!("path: {}", path);
+    println!("path: {}", filepath);
 
-    let raw_data = std::fs::read(filepath)?;
-    let (thumbnail, _orientation) = quickraw::Export::export_thumbnail_data(&raw_data)?;
+    let file = File::open(filepath)?;
+    let raw_buf = raw::mmap_raw(file)?;
+    let thumbnail = raw::extract_jpeg(&raw_buf)?;
+    // let raw_data = std::fs::read(filepath)?;
+    // let (thumbnail, _orientation) = quickraw::Export::export_thumbnail_data(&raw_data)?;
 
     Ok(http::Response::builder()
         .status(200)
