@@ -1,6 +1,13 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::io::Read;
+
+use tauri::{
+    http::{Request, Response},
+    AppHandle,
+};
+
 #[derive(serde::Serialize)]
 struct Metadata {
     accessed: std::time::SystemTime,
@@ -38,10 +45,25 @@ fn list_directory(path: &str) -> Vec<Item> {
         .collect::<Vec<Item>>();
 }
 
+fn protocol_raw_image_handler(_app: &AppHandle, req: Request<Vec<u8>>) -> Response<Vec<u8>> {
+    let path = req.uri().path();
+    println!("path: {}", path);
+
+    let mut file = std::fs::File::open("536225.jpg").unwrap();
+    let mut buffer = Vec::new();
+    file.read_to_end(buffer.as_mut()).unwrap();
+    Response::builder()
+        .status(200)
+        .header("Content-Type", "image/jpg")
+        .body(buffer)
+        .unwrap()
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![list_directory])
+        .register_uri_scheme_protocol("rawimage", protocol_raw_image_handler)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
