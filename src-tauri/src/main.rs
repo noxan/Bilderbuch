@@ -1,8 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::io::Read;
-
 use tauri::{
     http::{Request, Response},
     AppHandle,
@@ -46,16 +44,20 @@ fn list_directory(path: &str) -> Vec<Item> {
 }
 
 fn protocol_raw_image_handler(_app: &AppHandle, req: Request<Vec<u8>>) -> Response<Vec<u8>> {
+    // remove trailing slash from path
     let path = req.uri().path();
+    let filepath = percent_encoding::percent_decode(path[1..].as_bytes())
+        .decode_utf8_lossy()
+        .to_string();
     println!("path: {}", path);
 
-    let mut file = std::fs::File::open("536225.jpg").unwrap();
-    let mut buffer = Vec::new();
-    file.read_to_end(buffer.as_mut()).unwrap();
+    let raw_data = std::fs::read(filepath).unwrap();
+    let (thumbnail, _orientation) = quickraw::Export::export_thumbnail_data(&raw_data).unwrap();
+
     Response::builder()
         .status(200)
         .header("Content-Type", "image/jpg")
-        .body(buffer)
+        .body(thumbnail.to_vec())
         .unwrap()
 }
 
