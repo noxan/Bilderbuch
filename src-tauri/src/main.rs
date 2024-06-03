@@ -1,6 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::io::Cursor;
+
+use rawler::{analyze::extract_thumbnail_pixels, decoders::RawDecodeParams};
 use tauri::{http, AppHandle};
 
 #[derive(serde::Serialize)]
@@ -51,13 +54,16 @@ fn protocol_raw_image_handler(
         .to_string();
     println!("path: {}", path);
 
-    let raw_data = std::fs::read(filepath)?;
-    let (thumbnail, _orientation) = quickraw::Export::export_thumbnail_data(&raw_data)?;
+    let thumbnail = extract_thumbnail_pixels(filepath, RawDecodeParams::default())?;
+    let mut bytes = Cursor::new(Vec::new());
+    thumbnail.write_to(&mut bytes, image::ImageOutputFormat::Jpeg(80))?;
+
+    let result = bytes.into_inner();
 
     Ok(http::Response::builder()
         .status(200)
         .header("Content-Type", "image/jpg")
-        .body(thumbnail.to_vec())?)
+        .body(result)?)
 }
 
 fn main() {
