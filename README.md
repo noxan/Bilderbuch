@@ -13,19 +13,19 @@ This template should help get you started developing with Tauri, SvelteKit and T
 
 ## Raw processing and inspiration in Rust
 
-https://www.photoprism.app/
-https://github.com/darktable-org/rawspeed
-https://www.libraw.org/docs/API-CXX.html#unpack_thumb
-https://github.com/RawLabo/quickexif
-https://github.com/RawLabo/quickraw
-https://github.com/LibRaw/LibRaw
-https://github.com/pedrocr/rawloader
-https://github.com/dnglab/dnglab
-https://lib.rs/crates/rawler
-https://github.com/image-rs/image
-https://github.com/paolobarbolini/libraw-rs
-https://github.com/pedrocr/imagepipe/
-https://github.com/pedrocr/chimper
+- https://www.photoprism.app/
+- https://github.com/darktable-org/rawspeed
+- https://www.libraw.org/docs/API-CXX.html#unpack_thumb
+- https://github.com/RawLabo/quickexif
+- https://github.com/RawLabo/quickraw
+- https://github.com/LibRaw/LibRaw
+- https://github.com/pedrocr/rawloader
+- https://github.com/dnglab/dnglab
+- https://lib.rs/crates/rawler
+- https://github.com/image-rs/image
+- https://github.com/paolobarbolini/libraw-rs
+- https://github.com/pedrocr/imagepipe/
+- https://github.com/pedrocr/chimper
 
 ## Recommended IDE Setup
 
