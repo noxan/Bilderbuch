@@ -2,7 +2,7 @@
   "$schema": "https://github.com/tauri-apps/tauri/raw/tauri-v2.0.0-beta.22/core/tauri-config-schema/schema.json",
   "productName": "bilderbuch",
   "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "net.noxan.bilderbuch",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
