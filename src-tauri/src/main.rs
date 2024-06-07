@@ -49,7 +49,6 @@ fn protocol_raw_image_handler(
     let filepath = percent_encoding::percent_decode(path[1..].as_bytes())
         .decode_utf8_lossy()
         .to_string();
-    println!("path: {}", path);
 
     let file = std::fs::File::open(filepath)?;
     let raw_buf = unsafe { memmap2::Mmap::map(&file)? };
