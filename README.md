@@ -4,7 +4,7 @@ This template should help get you started developing with Tauri, SvelteKit and T
 
 ## Todo
 
-- [ ] Load preview images asynchronously
+- [x] Load preview images asynchronously
 - [ ] Error handling for file system operations
 - [ ] Initial setup for photo library (configure path and ensure folder exists)
 - [ ] Import photos (copy / move) to library
