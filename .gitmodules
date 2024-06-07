@@ -1,0 +1,3 @@
+[submodule "src-tauri/rawtojpg"]
+	path = src-tauri/rawtojpg
+	url = git@github.com:noxan/rawtojpg.git
