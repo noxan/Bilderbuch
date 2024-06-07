@@ -19,3 +19,5 @@ quickraw = "0.1.6"
 percent-encoding = "2.3.1"
 rawler = "0.6.0"
 image = "=0.24.7"
+rawtojpg = { path = "./rawtojpg" }
+memmap2 = "0.9.4"
