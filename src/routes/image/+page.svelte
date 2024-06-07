@@ -10,5 +10,6 @@
   </p>
 
   <img src={convertFileSrc("IMG_6360.CR2", "preview")} alt={"Image"} />
+  <img src={convertFileSrc("DSC00200.ARW", "preview")} alt={"Image"} />
   <img src={convertFileSrc("DSC_0702.NEF", "preview")} alt={"Image"} />
 </main>
