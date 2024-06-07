@@ -1,6 +1,25 @@
 <script lang="ts">
   import { invoke, convertFileSrc } from "@tauri-apps/api/core";
 
+  function lazyImage(node: HTMLElement, parameters: { source: string }) {
+    function observerCallback(entries: IntersectionObserverEntry[]) {
+      if (!entries[0].isIntersecting) {
+        return;
+      }
+      node.style.backgroundImage = `url(${parameters.source})`;
+      observer.unobserve(node);
+    }
+
+    const observer = new IntersectionObserver(observerCallback);
+    observer.observe(node);
+
+    return {
+      destroy() {
+        observer.unobserve(node);
+      },
+    };
+  }
+
   type SystemTime = {
     secs_since_epoch: number;
     nanos: number;
@@ -88,7 +107,7 @@
           </div>
           <div
             class="image"
-            style={`background-image: url(${buildImageSource(file.path)});`}
+            use:lazyImage={{ source: buildImageSource(file.path) }}
           />
           <small>
             {displayDate(file.metadata.created) + " "}
