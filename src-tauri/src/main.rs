@@ -25,22 +25,30 @@ fn list_directory(path: &str) -> Result<Vec<Item>, String> {
         Ok(files) => files,
         Err(e) => return Err(e.to_string()),
     };
-    return files
+    return match files
         .map(|file| {
-            let file = file.unwrap();
-            let metadata = file.metadata().unwrap();
+            let file = file?;
+            let metadata = file.metadata()?;
+            let name = file
+                .file_name()
+                .into_string()
+                .map_err(|_| format!("Invalid file name: {:?}", file.file_name()))?;
             Ok(Item {
-                name: file.file_name().into_string().unwrap(),
+                name: name,
                 path: file.path().display().to_string(),
                 metadata: Metadata {
-                    accessed: metadata.accessed().unwrap(),
-                    modified: metadata.modified().unwrap(),
-                    created: metadata.created().unwrap(),
+                    accessed: metadata.accessed()?,
+                    modified: metadata.modified()?,
+                    created: metadata.created()?,
                 },
-                is_directory: file.file_type().unwrap().is_dir(),
+                is_directory: file.file_type()?.is_dir(),
             })
         })
-        .collect::<Result<Vec<Item>, String>>();
+        .collect::<Result<Vec<Item>, Box<dyn std::error::Error>>>()
+    {
+        Ok(items) => Ok(items),
+        Err(e) => Err(e.to_string()),
+    };
 }
 
 fn protocol_preview_handler(
