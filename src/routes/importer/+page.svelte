@@ -92,7 +92,7 @@
   </p>
 
   <div class="grid">
-    {#each files as file}
+    {#each files as file (file.path)}
       <div>
         {#if file.is_directory}
           <button on:click={() => navigateTo(file.path)}>
