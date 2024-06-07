@@ -36,13 +36,19 @@
   }
   listDirectory();
 
-  function displayDate(time: SystemTime) {
-    return new Date(time.secs_since_epoch * 1000).toDateString();
+  function buildImageSource(path: string) {
+    switch (path.toLowerCase()) {
+      case ".jpg":
+      case ".jpeg":
+      case ".png":
+        return convertFileSrc(path);
+      default:
+        return "";
+    }
   }
 
-  function filterDisplayFile(path: string) {
-    const name = path.toLowerCase();
-    return name.endsWith(".jpg") || name.endsWith(".png");
+  function displayDate(time: SystemTime) {
+    return new Date(time.secs_since_epoch * 1000).toDateString();
   }
 </script>
 
@@ -79,7 +85,7 @@
           </div>
           <div
             class="image"
-            style={`background-image: url(${filterDisplayFile(file.path) ? convertFileSrc(file.path) : ""}`}
+            style={`background-image: url(${buildImageSource(file.path)});`}
           />
           <small>
             {displayDate(file.metadata.created) + " "}
