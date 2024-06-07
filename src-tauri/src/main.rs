@@ -40,7 +40,7 @@ fn list_directory(path: &str) -> Vec<Item> {
         .collect::<Vec<Item>>();
 }
 
-fn protocol_raw_image_handler(
+fn protocol_preview_handler(
     _app: &AppHandle,
     req: http::Request<Vec<u8>>,
 ) -> Result<http::Response<Vec<u8>>, Box<dyn std::error::Error>> {
@@ -66,8 +66,8 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![list_directory])
-        .register_uri_scheme_protocol("rawimage", |_app, req| {
-            match protocol_raw_image_handler(_app, req) {
+        .register_uri_scheme_protocol("preview", |_app, req| {
+            match protocol_preview_handler(_app, req) {
                 Ok(response) => response,
                 Err(e) => {
                     eprintln!("Error: {}", e);

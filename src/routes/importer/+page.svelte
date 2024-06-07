@@ -63,7 +63,7 @@
       case "png":
         return convertFileSrc(path);
       case "cr2":
-        return convertFileSrc(path, "rawimage");
+        return convertFileSrc(path, "preview");
       default:
         return "";
     }
