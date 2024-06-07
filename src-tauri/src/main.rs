@@ -25,11 +25,11 @@ fn list_directory(path: &str) -> Result<Vec<Item>, String> {
         Ok(files) => files,
         Err(e) => return Err(e.to_string()),
     };
-    Ok(files
+    return files
         .map(|file| {
             let file = file.unwrap();
             let metadata = file.metadata().unwrap();
-            return Item {
+            Ok(Item {
                 name: file.file_name().into_string().unwrap(),
                 path: file.path().display().to_string(),
                 metadata: Metadata {
@@ -38,9 +38,9 @@ fn list_directory(path: &str) -> Result<Vec<Item>, String> {
                     created: metadata.created().unwrap(),
                 },
                 is_directory: file.file_type().unwrap().is_dir(),
-            };
+            })
         })
-        .collect::<Vec<Item>>())
+        .collect::<Result<Vec<Item>, String>>();
 }
 
 fn protocol_preview_handler(
