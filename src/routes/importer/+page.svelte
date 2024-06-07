@@ -2,15 +2,13 @@
   import { invoke, convertFileSrc } from "@tauri-apps/api/core";
 
   function lazyImage(node: HTMLElement, source: string) {
-    function observerCallback(entries: IntersectionObserverEntry[]) {
+    const observer = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting) {
         return;
       }
       node.style.backgroundImage = `url(${source})`;
       observer.unobserve(node);
-    }
-
-    const observer = new IntersectionObserver(observerCallback);
+    });
     observer.observe(node);
 
     return {
