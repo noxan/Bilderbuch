@@ -49,7 +49,11 @@
 
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
   async function listDirectory(target: string) {
-    files = await invoke("list_directory", { path: target });
+    try {
+      files = await invoke("list_directory", { path: target });
+    } catch (error) {
+      // TODO: Notify user about the error
+    }
   }
   listDirectory(path);
 
