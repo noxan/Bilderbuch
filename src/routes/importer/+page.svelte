@@ -3,11 +3,10 @@
 
   function lazyImage(node: HTMLElement, source: string) {
     const observer = new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting) {
-        return;
+      if (entries[0].isIntersecting) {
+        node.style.backgroundImage = `url(${source})`;
+        observer.unobserve(node);
       }
-      node.style.backgroundImage = `url(${source})`;
-      observer.unobserve(node);
     });
     observer.observe(node);
 
