@@ -1,12 +1,12 @@
 <script lang="ts">
   import { invoke, convertFileSrc } from "@tauri-apps/api/core";
 
-  function lazyImage(node: HTMLElement, parameters: { source: string }) {
+  function lazyImage(node: HTMLElement, source: string) {
     function observerCallback(entries: IntersectionObserverEntry[]) {
       if (!entries[0].isIntersecting) {
         return;
       }
-      node.style.backgroundImage = `url(${parameters.source})`;
+      node.style.backgroundImage = `url(${source})`;
       observer.unobserve(node);
     }
 
@@ -105,10 +105,7 @@
           <div>
             {file.name}
           </div>
-          <div
-            class="image"
-            use:lazyImage={{ source: buildImageSource(file.path) }}
-          />
+          <div class="image" use:lazyImage={buildImageSource(file.path)} />
           <small>
             {displayDate(file.metadata.created) + " "}
           </small>
