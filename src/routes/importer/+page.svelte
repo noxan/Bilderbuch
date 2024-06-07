@@ -36,21 +36,22 @@
   let path = "/Volumes";
   let files: Item[] = [];
 
-  function navigateTo(target: string) {
+  async function navigateTo(target: string) {
+    await listDirectory(target);
     path = target;
-    listDirectory();
   }
 
-  function navigateUp() {
-    path = path.split("/").slice(0, -1).join("/");
-    listDirectory();
+  async function navigateUp() {
+    const target = path.split("/").slice(0, -1).join("/");
+    await listDirectory(target);
+    path = target;
   }
 
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-  async function listDirectory() {
-    files = await invoke("list_directory", { path });
+  async function listDirectory(target: string) {
+    files = await invoke("list_directory", { path: target });
   }
-  listDirectory();
+  listDirectory(path);
 
   function buildImageSource(path: string) {
     const extension = path.split(".").pop()?.toLocaleLowerCase();
