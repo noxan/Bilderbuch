@@ -37,10 +37,11 @@
   listDirectory();
 
   function buildImageSource(path: string) {
-    switch (path.toLowerCase()) {
-      case ".jpg":
-      case ".jpeg":
-      case ".png":
+    const extension = path.split(".").pop()?.toLocaleLowerCase();
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+      case "png":
         return convertFileSrc(path);
       default:
         return "";
