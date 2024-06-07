@@ -46,9 +46,9 @@ fn protocol_raw_image_handler(
 ) -> Result<http::Response<Vec<u8>>, Box<dyn std::error::Error>> {
     // remove trailing slash from path
     let path = req.uri().path();
-    let filepath = percent_encoding::percent_decode(path[1..].as_bytes())
-        .decode_utf8_lossy()
-        .to_string();
+    let trim_path = path.trim_start_matches("/");
+    let decode_path = percent_encoding::percent_decode(trim_path.as_bytes());
+    let filepath = decode_path.decode_utf8_lossy().to_string();
 
     let file = std::fs::File::open(filepath)?;
     let raw_buf = unsafe { memmap2::Mmap::map(&file)? };
