@@ -43,6 +43,8 @@
       case "jpeg":
       case "png":
         return convertFileSrc(path);
+      case "cr2":
+        return convertFileSrc(path, "rawimage");
       default:
         return "";
     }
