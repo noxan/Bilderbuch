@@ -20,9 +20,12 @@ struct Item {
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn list_directory(path: &str) -> Vec<Item> {
-    let files = std::fs::read_dir(path).unwrap();
-    return files
+fn list_directory(path: &str) -> Result<Vec<Item>, String> {
+    let files = match std::fs::read_dir(path) {
+        Ok(files) => files,
+        Err(e) => return Err(e.to_string()),
+    };
+    Ok(files
         .map(|file| {
             let file = file.unwrap();
             let metadata = file.metadata().unwrap();
@@ -37,7 +40,7 @@ fn list_directory(path: &str) -> Vec<Item> {
                 is_directory: file.file_type().unwrap().is_dir(),
             };
         })
-        .collect::<Vec<Item>>();
+        .collect::<Vec<Item>>())
 }
 
 fn protocol_preview_handler(
