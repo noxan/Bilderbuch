@@ -16,7 +16,13 @@
     "tray:default",
     "shell:allow-open",
     "fs:default",
+    "fs:scope-appconfig-recursive",
+    "fs:allow-appconfig-meta-recursive",
     "fs:allow-appconfig-write-recursive",
-    "fs:allow-appconfig-read-recursive"
+    "fs:allow-appconfig-read-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**" }]
+    }
   ]
 }
