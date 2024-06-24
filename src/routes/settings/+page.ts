@@ -23,16 +23,15 @@ const defaultSettings = {
 }
 
 export const load: PageLoad = async ({ params }) => {
-  let settings = defaultSettings;
   const fileExists = await exists('settings.json', { baseDir: BaseDirectory.AppConfig });
   if (!fileExists) {
     console.log('Create settings directory')
     await mkdir('', {baseDir: BaseDirectory.AppConfig, recursive: true })
     console.log('Creating settings.json');
     await writeSettings({ success: true });
-  } else {
-    settings = await readSettings();
   }
+
+  const settings = await readSettings();
 
   return {
     fileExists,
