@@ -1,6 +1,6 @@
 .DS_Store
 .git/
 node_modules/
-src-tauri/
+src-tauri/target/
 bun.lockb
 build/
