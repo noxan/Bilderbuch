@@ -7,7 +7,9 @@
 <main>
   <h1>Settings</h1>
 
-  <a href="/">Close</a>
+  <p>
+    <a href="/">Close</a>
+  </p>
 
-  {JSON.stringify(data)}
+  <pre><code>{JSON.stringify(data, null, 2)}</code></pre>
 </main>
