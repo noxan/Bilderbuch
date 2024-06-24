@@ -14,8 +14,7 @@ export const load: PageLoad = async ({ params }) => {
   const fileExists = await exists('settings.json', { baseDir: BaseDirectory.AppConfig });
   if (!fileExists) {
     console.log('Create settings directory')
-    const settingsDirectory = await appConfigDir();
-    await mkdir(settingsDirectory, { recursive: true })
+    await mkdir('', {baseDir: BaseDirectory.AppConfig, recursive: true })
     console.log('Creating settings.json');
     await writeSettings({ success: true });
   }
