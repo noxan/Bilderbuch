@@ -28,6 +28,12 @@
         },
         {
           "path": "$APPDATA/**"
+        },
+        {
+          "path": "$PICTURE"
+        },
+        {
+          "path": "$PICTURE/**"
         }
       ]
     }
