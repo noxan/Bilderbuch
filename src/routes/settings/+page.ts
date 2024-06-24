@@ -29,6 +29,8 @@ export const load: PageLoad = async ({ params }) => {
     await mkdir('', {baseDir: BaseDirectory.AppConfig, recursive: true })
     console.log('Creating settings.json');
     await writeSettings({ success: true });
+  } else {
+    readSettings();
   }
 
   return {
