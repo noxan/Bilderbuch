@@ -3,6 +3,12 @@ import type { PageLoad } from "./$types";
 
 import { BaseDirectory, exists, mkdir, writeFile } from '@tauri-apps/plugin-fs';
 
+async function writeSettings(settings: object) {
+  let encoder = new TextEncoder();
+  let data = encoder.encode(JSON.stringify(settings));
+  return writeFile('settings.json', data, { baseDir: BaseDirectory.AppConfig, create: true });
+}
+
 
 export const load: PageLoad = async ({ params }) => {
   const fileExists = await exists('settings.json', { baseDir: BaseDirectory.AppConfig });
@@ -11,9 +17,7 @@ export const load: PageLoad = async ({ params }) => {
     const settingsDirectory = await appConfigDir();
     await mkdir(settingsDirectory, { recursive: true })
     console.log('Creating settings.json');
-    let encoder = new TextEncoder();
-    let data = encoder.encode(JSON.stringify({ success: true }));
-    await writeFile('settings.json', data, { baseDir: BaseDirectory.AppConfig, create: true });
+    await writeSettings({ success: true });
   }
 
   return {
