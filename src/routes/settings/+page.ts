@@ -1,7 +1,5 @@
-import { appConfigDir, resolve } from "@tauri-apps/api/path";
+import { BaseDirectory, exists, mkdir, readFile, writeFile } from '@tauri-apps/plugin-fs';
 import type { PageLoad } from "./$types";
-
-import { BaseDirectory, exists, mkdir, writeFile } from '@tauri-apps/plugin-fs';
 
 async function writeSettings(settings: object) {
   let encoder = new TextEncoder();
@@ -9,6 +7,20 @@ async function writeSettings(settings: object) {
   return writeFile('settings.json', data, { baseDir: BaseDirectory.AppConfig, create: true });
 }
 
+async function readSettings() {
+  const raw = await readFile('settings.json', { baseDir: BaseDirectory.AppConfig });
+  const decoder = new TextDecoder();
+  const data = decoder.decode(raw);
+  const userSettings = JSON.parse(data);
+  return {
+    ...defaultSettings,
+    ...userSettings,
+  }
+}
+
+const defaultSettings = {
+  success: true,
+}
 
 export const load: PageLoad = async ({ params }) => {
   const fileExists = await exists('settings.json', { baseDir: BaseDirectory.AppConfig });
