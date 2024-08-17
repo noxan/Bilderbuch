@@ -6,6 +6,7 @@ import {
   writeFile,
 } from "@tauri-apps/plugin-fs";
 import type { PageLoad } from "./$types";
+import { appConfigDir } from "@tauri-apps/api/path";
 
 async function writeSettings(settings: object) {
   let encoder = new TextEncoder();
@@ -49,5 +50,6 @@ export const load: PageLoad = async ({ params }) => {
   return {
     fileExists,
     settings,
+    path: await appConfigDir(),
   };
 };
