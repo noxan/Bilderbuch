@@ -7,10 +7,9 @@ export const load: PageLoad = async ({ params }) => {
   if (!fileExists) {
     await mkdir("", { baseDir: BaseDirectory.Picture, recursive: true });
   }
-  console.log(await pictureDir());
+  const libraryDirectory = await pictureDir();
 
   return {
-    fileExists,
-    pictureDirectory: await pictureDir(),
+    libraryDirectory,
   };
 };
