@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{http, AppHandle};
+use tauri::http;
 
 #[derive(serde::Serialize)]
 struct Metadata {
@@ -52,7 +52,6 @@ fn list_directory(path: &str) -> Result<Vec<Item>, String> {
 }
 
 fn protocol_preview_handler(
-    _app: &AppHandle,
     req: http::Request<Vec<u8>>,
 ) -> Result<http::Response<Vec<u8>>, Box<dyn std::error::Error>> {
     // remove trailing slash from path
@@ -78,16 +77,14 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![list_directory])
-        .register_uri_scheme_protocol("preview", |_app, req| {
-            match protocol_preview_handler(_app, req) {
-                Ok(response) => response,
-                Err(e) => {
-                    eprintln!("Error: {}", e);
-                    http::Response::builder()
-                        .status(500)
-                        .body(Vec::new())
-                        .unwrap()
-                }
+        .register_uri_scheme_protocol("preview", |_ctx, req| match protocol_preview_handler(req) {
+            Ok(response) => response,
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                http::Response::builder()
+                    .status(500)
+                    .body(Vec::new())
+                    .unwrap()
             }
         })
         .run(tauri::generate_context!())
