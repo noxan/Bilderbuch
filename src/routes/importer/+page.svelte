@@ -108,7 +108,7 @@
           <div>
             {file.name}
           </div>
-          <div class="image" use:lazyImage={buildImageSource(file.path)} />
+          <div class="image" use:lazyImage={buildImageSource(file.path)}></div>
           <small>
             {displayDate(file.metadata.created) + " "}
           </small>
