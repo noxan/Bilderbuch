@@ -12,13 +12,13 @@ tauri-build = { version = "2.0.3", features = [] }
 
 [dependencies]
 tauri = { version = "2.1.1", features = ["protocol-asset"] }
-tauri-plugin-shell = "2.0.2"
+tauri-plugin-shell = "2.2.0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 quickraw = "0.1.6"
 percent-encoding = "2.3.1"
 rawler = "0.6.0"
-image = "=0.24.7"
+image = "=0.25.5"
 rawtojpg = { path = "./rawtojpg" }
 memmap2 = "0.9.5"
-tauri-plugin-fs = "2.0.3"
+tauri-plugin-fs = "2.2.0"
