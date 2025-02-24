@@ -51,25 +51,22 @@ fn list_directory(path: &str) -> Result<Vec<Item>, String> {
     };
 }
 
-fn protocol_preview_handler(
+async fn protocol_preview_handler(
     req: http::Request<Vec<u8>>,
-) -> Result<http::Response<Vec<u8>>, Box<dyn std::error::Error>> {
+) -> Result<Vec<u8>, Box<dyn std::error::Error + Send + Sync>> {
     // remove trailing slash from path
     let path = req.uri().path();
     let trim_path = path.trim_start_matches("/");
     let decode_path = percent_encoding::percent_decode(trim_path.as_bytes());
     let filepath = decode_path.decode_utf8_lossy().to_string();
 
-    let file = std::fs::File::open(filepath)?;
-    let raw_buf = unsafe { memmap2::Mmap::map(&file)? };
+    let file = tokio::fs::File::open(filepath).await?;
+    let raw_buf = unsafe { memmap2::Mmap::map(&file.into_std().await)? };
     raw_buf.advise(memmap2::Advice::Random)?;
     let thumbnail = rawtojpg::extract_jpeg(&raw_buf)?;
     let result = thumbnail.to_vec();
 
-    Ok(http::Response::builder()
-        .status(200)
-        .header("Content-Type", "image/jpg")
-        .body(result)?)
+    Ok(result)
 }
 
 fn main() {
@@ -77,15 +74,28 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![list_directory])
-        .register_uri_scheme_protocol("preview", |_ctx, req| match protocol_preview_handler(req) {
-            Ok(response) => response,
-            Err(e) => {
-                eprintln!("Error: {}", e);
-                http::Response::builder()
-                    .status(500)
-                    .body(Vec::new())
-                    .unwrap()
-            }
+        .register_asynchronous_uri_scheme_protocol("preview", |_ctx, request, responder| {
+            tauri::async_runtime::block_on(async {
+                let response = protocol_preview_handler(request).await;
+                match response {
+                    Ok(response) => responder.respond(
+                        http::Response::builder()
+                            .status(200)
+                            .header("Content-Type", "image/jpeg")
+                            .body(response)
+                            .unwrap(),
+                    ),
+                    Err(e) => {
+                        responder.respond(
+                            http::Response::builder()
+                                .status(500)
+                                .body(e.to_string().as_bytes().to_vec())
+                                .unwrap(),
+                        );
+                    }
+                }
+            });
+            ()
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
